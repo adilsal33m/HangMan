@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="adilsal33m.com.hangman.MainActivity"
+android:orientation="vertical"
+    android:background="@drawable/bg"
+android:gravity="center_horizontal">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <ImageView android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:id="@+id/life_image"
+        android:layout_alignParentRight="true"
+        android:background="#00000000"
+        />
+    </RelativeLayout>
+<com.google.android.flexbox.FlexboxLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:flexWrap="wrap"
+    app:justifyContent="center"
+    android:id="@+id/flex_layout"
+    android:padding="8dp">
+</com.google.android.flexbox.FlexboxLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_margin="8dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ddffffff"
+        android:textSize="24sp"
+        android:text="Used Letters"/>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:textDirection="ltr"
+        android:background="#80000000">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/used_letter"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="24sp"/>
+    </ScrollView>
+</LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center">
+    <EditText
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:maxLength="1"
+        android:textAlignment="center"
+        android:textSize="48dp"
+        android:scaleX="0.8"
+        android:id="@+id/get_text"
+        android:textColor="@android:color/white"
+        android:background="@drawable/letter_bg"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/test_button"
+        android:textColor="#ffffff"
+        android:background="@drawable/button_shape"
+        android:text="Try"></Button>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/reset_button"
+        android:textColor="#ffffff"
+        android:background="@drawable/button_shape"
+        android:layout_marginLeft="8dp"
+        android:text="Reset"></Button>
+</LinearLayout>
+    <ImageView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitEnd"
+        android:src="@drawable/main_bg"
+        android:layout_weight="1"/>
+</LinearLayout>

@@ -142,6 +142,8 @@ public class MainFragment extends Fragment {
         testCount = 0;
         life=5;
         mTestButton.setEnabled(true);
+        mTestButton.setBackgroundResource(R.drawable.button_shape);
+        mTestButton.setTextColor(Color.WHITE);
         fbox.removeAllViews();
         displayWord();
     }
@@ -169,6 +171,8 @@ public class MainFragment extends Fragment {
             case 0:
                 showWord();
                 mTestButton.setEnabled(false);
+                mTestButton.setTextColor(Color.DKGRAY);
+                mTestButton.setBackgroundResource(R.drawable.button_shape_2);
                 img.setBackgroundResource(R.drawable.state5_6);
                 break;
 

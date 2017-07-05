@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="developer">developed by adil saleem</string>
+    <string name="instr_1">Guess Random Words</string>
+    <string name="instr_2">You have 5 chances</string>
+    <string name="instr_3">SAVE HIM...</string>
+    <string name="label_start">Start</string>
 </resources>

@@ -10,6 +10,8 @@
     <item android:drawable="@drawable/state4_7" android:duration="200" />
     <item android:drawable="@drawable/state4_8" android:duration="100" />
     <item android:drawable="@drawable/state4_9" android:duration="200" />
-    <item android:drawable="@drawable/state4_10" android:duration="100" />
-    <item android:drawable="@drawable/state4_11" android:duration="200" />
+    <item android:drawable="@drawable/state4_10" android:duration="50" />
+    <item android:drawable="@drawable/state4_11" android:duration="500" />
+    <item android:drawable="@drawable/state4_10" android:duration="50" />
+    <item android:drawable="@drawable/state4_11" android:duration="500" />
 </animation-list>

@@ -4,6 +4,7 @@ package adilsal33m.com.hangman;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
@@ -29,17 +30,18 @@ import java.util.ArrayList;
 public class MainFragment extends Fragment {
 
     mainFragmentInterface mListener;
+    MediaPlayer sound;
+    MediaPlayer voice;
     FlexboxLayout fbox;
     Button mTestButton;
     Button mResetButton;
     EditText mEditText;
     TextView mUsedLetters;
-    String word = "";
-    String letter = "";
-    int testCount;
-    int life=5;
-    ArrayList<String> used = new ArrayList<String>();
-
+    private static String word = "";
+    private static int testCount;
+    private static int life=5;
+    private static ArrayList<String> used = new ArrayList<String>();
+    private static ArrayList<Integer> correctGuess=  new ArrayList<Integer>();
 
     // TODO: Rename and change types and number of parameters
     public static MainFragment newInstance() {
@@ -58,8 +60,8 @@ public class MainFragment extends Fragment {
 
 
         fbox = (FlexboxLayout) getActivity().findViewById(R.id.flex_layout);
-
-        word = Words.getWord();
+        if(word.equals(""))
+            word = Words.getWord();
         displayWord();
 
         mEditText = (EditText) getActivity().findViewById(R.id.get_text);
@@ -84,8 +86,10 @@ public class MainFragment extends Fragment {
                             n = word.indexOf(mEditText.getText().toString().toLowerCase(), n) + 1;
                             if (n == 0)
                                 break;
-                            else
+                            else {
                                 num.add(n - 1);
+                                correctGuess.add(n-1);
+                            }
                         }
                         for (int i : num) {
                             testCount++;
@@ -95,13 +99,13 @@ public class MainFragment extends Fragment {
                             t.startAnimation(anim);
                         }
                         mEditText.setText("");
-                        if (num.size() > 0)
+                        if (num.size() > 0) {
                             checkWin();
+                        }
                         else{
                             //Toast.makeText(getApplicationContext(),"Wrong Guess Smartass! B)",Toast.LENGTH_SHORT).show();
                             mListener.showAnimation(--life);
                             changeLifeImage(life);}
-
                     }
                 }
             }
@@ -116,6 +120,61 @@ public class MainFragment extends Fragment {
             }
         });
 
+        restoreWord();
+    }
+
+    private void playWrongSound() {
+        sound=MediaPlayer.create(getActivity(),R.raw.wrong);
+        sound.start();
+        sound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                voice=MediaPlayer.create(getActivity(),R.raw.gasp);
+                voice.start();
+            }
+        });
+    }
+
+    private void playRightSound() {
+        sound=MediaPlayer.create(getActivity(),R.raw.yes);
+        sound.start();
+        sound.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                voice=MediaPlayer.create(getActivity(),R.raw.do_it);
+                voice.start();
+            }
+        });
+    }
+
+    private void playDieSound() {
+        voice=MediaPlayer.create(getActivity(),R.raw.die);
+        voice.start();
+        voice.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                sound=MediaPlayer.create(getActivity(),R.raw.neck_snap);
+                sound.start();
+            }
+        });
+    }
+
+    private void playWinSound() {
+        voice=MediaPlayer.create(getActivity(),R.raw.woohoo);
+        voice.start();
+        voice.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                sound=MediaPlayer.create(getActivity(),R.raw.yes);
+                sound.start();
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        resetWord();
     }
 
     @Override
@@ -126,17 +185,41 @@ public class MainFragment extends Fragment {
         return view;
     }
 
+    private void restoreWord(){
+        changeLifeImage(life);
+        for (int i : correctGuess) {
+            TextView t = (TextView) getActivity().findViewById(i);
+            t.setTextColor(Color.parseColor("#ffffffff"));
+        }
+        restoreUsedLetters();
+    }
+
+    private void restoreUsedLetters() {
+        mUsedLetters.setText("");
+        for (String s:used) {
+            if (mUsedLetters.getText().toString().equals(""))
+                mUsedLetters.setText(s);
+            else
+                mUsedLetters.setText(mUsedLetters.getText() + "," + s);
+        }
+    }
+
     private void checkWin() {
         if (testCount == word.length()) {
-            Toast.makeText(getActivity(), "You guessed the word correctly! :)\nThe word was " + word, Toast.LENGTH_LONG).show();
-
+           // Toast.makeText(getActivity(), "You guessed the word correctly! :)\nThe word was " + word, Toast.LENGTH_LONG).show();
+            mTestButton.setEnabled(false);
+            mTestButton.setTextColor(Color.DKGRAY);
+            mTestButton.setBackgroundResource(R.drawable.button_shape_2);
+            playWinSound();
         } else {
+            playRightSound();
             Toast.makeText(getActivity(), "Only " + (word.length() - testCount) + " more letter" + ((word.length() - testCount) < 2 ? "" : "s") + " to go!", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void resetWord() {
         mUsedLetters.setText("");
+        correctGuess.clear();
         used.clear();
         word = Words.getWord();
         testCount = 0;
@@ -170,6 +253,7 @@ public class MainFragment extends Fragment {
         switch(i){
             case 0:
                 showWord();
+                playDieSound();
                 mTestButton.setEnabled(false);
                 mTestButton.setTextColor(Color.DKGRAY);
                 mTestButton.setBackgroundResource(R.drawable.button_shape_2);
@@ -178,18 +262,22 @@ public class MainFragment extends Fragment {
 
             case 1:
                 img.setBackgroundResource(R.drawable.state4_11);
+                playWrongSound();
                 break;
 
             case 2:
                 img.setBackgroundResource(R.drawable.state3_11);
+                playWrongSound();
                 break;
 
             case 3:
                 img.setBackgroundResource(R.drawable.state2_10);
+                playWrongSound();
                 break;
 
             case 4:
                 img.setBackgroundResource(R.drawable.state1_10);
+                playWrongSound();
                 break;
             default:
                 break;
@@ -222,7 +310,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().finish();
     }
 
     public interface mainFragmentInterface{
